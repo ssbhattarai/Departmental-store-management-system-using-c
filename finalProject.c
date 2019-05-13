@@ -1,4 +1,4 @@
-// This program only run on gcc compiler.
+// Only run on GCC compiler.
 /*
 Departmental store management system to insert, display, delete,update and sale product 
 */
