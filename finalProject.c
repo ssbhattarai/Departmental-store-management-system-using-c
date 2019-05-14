@@ -1,6 +1,6 @@
-// Only run on GCC compiler.
+// This program only run on gcc compiler.
 /*
-Departmental store management system to insert, display, delete,update and sale product 
+Departmental store management system to insert, display, delete,update and sale product
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -403,6 +403,11 @@ void saleProduct()
 
         printf("Enter Quantity:");
         scanf("%d", &q);
+        if (item.quantity == 0)
+        {
+            printf("\nOut of stack.\n");
+            break;
+        }
         availableQ = isProductAvailable(q);
         if (availableQ == 0)
         {
@@ -427,11 +432,7 @@ void saleProduct()
                 gtotal = gtotal + total;
                 size = sizeof(item);
                 item.quantity = item.quantity - q;
-                // if (item.quantity == 0)
-                // {
 
-                //     deleteRecord();
-                // }
                 i++;
                 fseek(file, -size, SEEK_CUR);
                 fwrite(&item, sizeof(item), 1, file);
