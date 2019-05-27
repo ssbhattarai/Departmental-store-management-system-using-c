@@ -146,6 +146,11 @@ void display()
     printf("\t\t\t\t\t--------------------------------------------------------------------------------------\n");
     printf("\t\t\t\t\t  CODE\t||\tNAME\t||\tRATE\t||\tQUANTITY\t||\tDESCRIPTION\n");
     printf("\t\t\t\t\t--------------------------------------------------------------------------------------\n");
+    if (file == NULL)
+    {
+        printf("\t\t\t\tNo Product is inserted.");
+        options();
+    }
     while (fread(&item, sizeof(item), 1, file))
     {
         printf("\t\t\t\t\t%s\t||\t%s\t||\t%d\t||\t %d\t\t||\t%s \n", item.product_code, item.product_name, item.rate, item.quantity, item.description);
@@ -180,6 +185,11 @@ void search()
     FILE *file;
     char code[MAX], product[MAX];
     int available;
+    if (file == NULL)
+    {
+        printf("\t\t\t\tNo Product is inserted.");
+        options();
+    }
     printf("\v\t\t\t\t\tEnter the Product code to search: ");
     scanf("%s", code);
     system("clear");
@@ -221,6 +231,11 @@ void deleteRecord()
     FILE *file1, *file2;
     char code[MAX], product[MAX];
     int available;
+    if (file1 == NULL)
+    {
+        printf("\t\t\t\tNo Product is inserted.");
+        options();
+    }
     printf("\t\t\t\t\t\tEnter the Product code to delete: ");
     scanf("%s", code);
     system("clear");
@@ -267,6 +282,11 @@ void updateProduct()
     FILE *file1, *file2;
     char code[MAX], product[MAX];
     int available;
+    if (file1 == NULL)
+    {
+        printf("\t\t\t\tNo Product is inserted.");
+        options();
+    }
     printf("enter the Product code to update the record:");
     scanf("%s", code);
     available = isCodeAvailable(code);
@@ -372,6 +392,11 @@ void saleProduct()
     int q = 0, size = 0, i = 1;
     int total = 0, gtotal = 0;
     FILE *file;
+    if (file == NULL)
+    {
+        printf("\t\t\tno product is found.");
+        options();
+    }
     file = fopen("Record.txt", "r+b");
     rewind(file);
     // system("clear");
@@ -520,4 +545,3 @@ void options()
         } // end of switch
     }
 }
-//end of project
