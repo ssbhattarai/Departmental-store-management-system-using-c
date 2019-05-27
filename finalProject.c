@@ -68,7 +68,7 @@ int get_int(int input)
         }
         // system("clear");
         printf("\033[1;31m");
-        printf("\n\v\t\t\t\t\t\tChoice be positive Integer.\n");
+        printf("\n\v\t\t\t\t\t\tMust be positive integer.\n");
         printf("\033[0m");
         printf("\t\t\t\t\tEnter Positive integer value, such as 1,2,3,4: ");
     }
@@ -143,20 +143,20 @@ void display()
     FILE *file;
     int count = 0;
     file = fopen("Record.txt", "rb");
-    printf("\t\t\t\t\t--------------------------------------------------------------------------------------\n");
-    printf("\t\t\t\t\t  CODE\t||\tNAME\t||\tRATE\t||\tQUANTITY\t||\tDESCRIPTION\n");
-    printf("\t\t\t\t\t--------------------------------------------------------------------------------------\n");
-    if (file == NULL)
-    {
-        printf("\t\t\t\tNo Product is inserted.");
-        options();
-    }
+    printf("\t\t\t----------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\tCODE\t||\tNAME\t||\tRATE\t||\tQUANTITY\t||\tDESCRIPTION\n");
+    printf("\t\t\t----------------------------------------------------------------------------------------------\n");
+    // if (file == NULL)
+    // {
+    //     printf("\t\t\t\tNo Product is inserted.");
+    //     options();
+    // }
     while (fread(&item, sizeof(item), 1, file))
     {
-        printf("\t\t\t\t\t%s\t||\t%s\t||\t%d\t||\t %d\t\t||\t%s \n", item.product_code, item.product_name, item.rate, item.quantity, item.description);
+        printf("\t\t\t\t%s\t||\t%s\t||\t%d\t||\t %d\t\t||\t%s \n", item.product_code, item.product_name, item.rate, item.quantity, item.description);
         count++;
     }
-    printf("\t\t\t\t\t--------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t----------------------------------------------------------------------------------------------\n");
     if (count == 0)
     {
         system("clear");
@@ -185,11 +185,11 @@ void search()
     FILE *file;
     char code[MAX], product[MAX];
     int available;
-    if (file == NULL)
-    {
-        printf("\t\t\t\tNo Product is inserted.");
-        options();
-    }
+    // if (file == NULL)
+    // {
+    //     printf("\t\t\t\tNo Product is inserted.");
+    //     options();
+    // }
     printf("\v\t\t\t\t\tEnter the Product code to search: ");
     scanf("%s", code);
     system("clear");
@@ -231,11 +231,12 @@ void deleteRecord()
     FILE *file1, *file2;
     char code[MAX], product[MAX];
     int available;
-    if (file1 == NULL)
-    {
-        printf("\t\t\t\tNo Product is inserted.");
-        options();
-    }
+    file1 = fopen("Record.txt", "rb");
+    // if (file1 == NULL)
+    // {
+    //     printf("\t\t\t\tNo Product is inserted.");
+    //     options();
+    // }
     printf("\t\t\t\t\t\tEnter the Product code to delete: ");
     scanf("%s", code);
     system("clear");
@@ -249,7 +250,7 @@ void deleteRecord()
     }
     else
     {
-        file1 = fopen("Record.txt", "rb");
+
         file2 = fopen("tempfile.txt", "wb");
         while (fread(&item, sizeof(item), 1, file1))
         {
@@ -282,11 +283,11 @@ void updateProduct()
     FILE *file1, *file2;
     char code[MAX], product[MAX];
     int available;
-    if (file1 == NULL)
-    {
-        printf("\t\t\t\tNo Product is inserted.");
-        options();
-    }
+    // if (file1 == NULL)
+    // {
+    //     printf("\t\t\t\tNo Product is inserted.");
+    //     options();
+    // }
     printf("enter the Product code to update the record:");
     scanf("%s", code);
     available = isCodeAvailable(code);
@@ -392,11 +393,11 @@ void saleProduct()
     int q = 0, size = 0, i = 1;
     int total = 0, gtotal = 0;
     FILE *file;
-    if (file == NULL)
-    {
-        printf("\t\t\tno product is found.");
-        options();
-    }
+    // if (file == NULL)
+    // {
+    //     printf("\t\t\tno product is found.");
+    //     options();
+    // }
     file = fopen("Record.txt", "r+b");
     rewind(file);
     // system("clear");
