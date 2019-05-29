@@ -15,6 +15,7 @@ typedef struct items
     char product_name[MAX];
     int rate;
     int quantity;
+    float weight;
     char description[30];
 
 } ITEM;
@@ -47,7 +48,7 @@ int isProductAvailable(int quantity)
     while (!feof(file))
     {
         fread(&item, sizeof(item), 1, file);
-        if (item.quantity > quantity)
+        if (item.quantity >= quantity)
         {
             fclose(file);
             return 1;
@@ -103,10 +104,18 @@ void addProduct()
     printf("\t\t\t\t\t\t************************\n");
     FILE *file;
     char code[MAX];
+    char x[4] = {0};
     int a;
     file = fopen("Record.txt", "ab");
+    printf("\n\t\t\t\t\tEnter the \" end \" to exit for here");
     printf("\n\t\t\t\t\tEnter Product code: ");
     scanf("%s", code);
+    // scanf("%s", x);
+    if (strcmp(code, "end") == 0)
+    {
+        system("clear");
+        options();
+    }
     int available;
     available = isCodeAvailable(code); // return 1 if code id found and return 0 if the code is not available.
     if (available == 1)
@@ -128,12 +137,15 @@ void addProduct()
     item.rate = a;
     printf("\n\t\t\t\t\tEnter Quantity: ");
     scanf("%d", &item.quantity);
+    printf("\n\t\t\t\t\tEnter product Weight(in gram): ");
+    scanf("%f", &item.weight);
     printf("\n\t\t\t\t\tEnter product descriptions: ");
-    scanf("%s", item.description);
+    scanf(" %s", item.description);
 
     // writing structure to a file
     fwrite(&item, sizeof(item), 1, file);
     fclose(file);
+
 } // End of addproduct function
 
 void display()
@@ -143,20 +155,20 @@ void display()
     FILE *file;
     int count = 0;
     file = fopen("Record.txt", "rb");
-    printf("\t\t\t----------------------------------------------------------------------------------------------\n");
-    printf("\t\t\t\tCODE\t||\tNAME\t||\tRATE\t||\tQUANTITY\t||\tDESCRIPTION\n");
-    printf("\t\t\t----------------------------------------------------------------------------------------------\n");
-    // if (file == NULL)
-    // {
-    //     printf("\t\t\t\tNo Product is inserted.");
-    //     options();
-    // }
+    printf("\t\t\t------------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\tCODE\t||\tNAME\t||\tRATE\t||\tQUANTITY\t||\tWEIGHT\t||\tDESCRIPTION\n");
+    printf("\t\t\t------------------------------------------------------------------------------------------------------\n");
+    if (file == NULL)
+    {
+        printf("\t\t\t\tNo Product is inserted.");
+        options();
+    }
     while (fread(&item, sizeof(item), 1, file))
     {
-        printf("\t\t\t\t%s\t||\t%s\t||\t%d\t||\t %d\t\t||\t%s \n", item.product_code, item.product_name, item.rate, item.quantity, item.description);
+        printf("\t\t\t%s\t||\t%s\t||\t%d\t||\t %d\t\t||\t%.2f\t||\t%s \n", item.product_code, item.product_name, item.rate, item.quantity, item.weight, item.description);
         count++;
     }
-    printf("\t\t\t----------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t------------------------------------------------------------------------------------------------------\n");
     if (count == 0)
     {
         system("clear");
@@ -190,8 +202,14 @@ void search()
     //     printf("\t\t\t\tNo Product is inserted.");
     //     options();
     // }
+    printf("\v\t\t\t\t\tEnter \"end\" for back to menu.\n");
     printf("\v\t\t\t\t\tEnter the Product code to search: ");
     scanf("%s", code);
+    if (strcmp(code, "end") == 0)
+    {
+        system("clear");
+        options();
+    }
     system("clear");
     printf("\v\v\t\t\t\t\t\tProduct information\n");
     printf("\t\t\t\t\t\t**********************\n");
@@ -215,6 +233,7 @@ void search()
                 printf("\n\t\t\t\t\t\tProduct Code:        %s", item.product_code);
                 printf("\n\t\t\t\t\t\tName of Product:     %s", item.product_name);
                 printf("\n\t\t\t\t\t\tRate of Product(RS): %d", item.rate);
+                printf("\n\t\t\t\t\t\tProduct Weight:      %.2f", item.weight);
                 printf("\n\t\t\t\t\t\tProduct Description: %s\n", item.description);
             }
         }
@@ -226,8 +245,8 @@ void search()
 
 void deleteRecord()
 {
-    printf("\v\v\t\t\t\t\t\t\tDelete Product\n");
-    printf("\t\t\t\t\t\t************************\n");
+    // printf("\v\v\t\t\t\t\t\t\tDelete Product\n");
+    // printf("\t\t\t\t\t\t************************\n");
     FILE *file1, *file2;
     char code[MAX], product[MAX];
     int available;
@@ -237,7 +256,8 @@ void deleteRecord()
     //     printf("\t\t\t\tNo Product is inserted.");
     //     options();
     // }
-    printf("\t\t\t\t\t\tEnter the Product code to delete: ");
+    display();
+    printf("\n\t\t\t\t\t\tEnter the Product code to delete: ");
     scanf("%s", code);
     system("clear");
     available = isCodeAvailable(code);
@@ -268,7 +288,7 @@ void deleteRecord()
         {
             fwrite(&item, sizeof(item), 1, file1);
         }
-        printf("Product deleted sucessfully!!\n\n");
+        printf("\n\v\t\t\t\t\t\tProduct deleted sucessfully!!\n\n");
         fclose(file1);
         fclose(file2);
     }
@@ -321,6 +341,8 @@ void updateProduct()
                 scanf("%d", &item.rate);
                 printf("Enter Quantity: ");
                 scanf("%d", &item.quantity);
+                printf("Enter weight: ");
+                scanf("%f", item.weight);
                 printf("enter product descriptions: ");
                 scanf("%s", item.description);
                 printf("\n\n");
@@ -403,17 +425,18 @@ void saleProduct()
     // system("clear");
     // dbill();
     int availableC, availableQ;
-    printf("Enter  \"end\" to finish input");
+    printf("\t\t\t\t\tEnter  \" end \" to finish input");
+    int qty = item.quantity;
     while (1)
     {
-
         printf("                    ");
         printf("                    ");
-        printf("\n\v\vEnter Item Code:");
+        printf("\n\v\t\t\t\tEnter Item Code:");
         // printf("\n\v\vEnter Item Code:");
         scanf("%s", x);
         if (strcmp(x, "end") == 0)
         {
+            system("clear");
             break;
         }
         availableC = isCodeAvailable(x);
@@ -425,36 +448,46 @@ void saleProduct()
             printf("\033[0m");
             options();
         }
-        // getline(&x, MAX, stdin);
 
-        printf("Enter Quantity:");
+        printf("\t\t\t\tEnter Quantity:");
         scanf("%d", &q);
-        if (item.quantity == 0)
+        // printf("item%d", item.quantity);
+
+        // printf("beg%d", qty);
+        qty = qty - q;
+        if (qty < 0)
         {
-            printf("\nOut of stack.\n");
-            break;
-        }
-        availableQ = isProductAvailable(q);
-        if (availableQ == 0)
-        {
-            // system("clear");
             system("clear");
             printf("\033[1;31m");
-            printf("\n\v\t\t\t\t\t\t* This product has 0 quantity.");
+            system("clear");
+            printf("\n\t\t\t\t\t\t* Out of stock.\n");
             printf("\033[0m");
-            options();
+            break;
         }
+
+        // printf("qqqq%d", qty);
+
+        // availableQ = isProductAvailable(q);
+        // if (availableQ == 0)
+        // {
+        //     // system("clear");
+        //     system("clear");
+        //     printf("\033[1;31m");
+        //     printf("\n\v\t\t\t\t\t\t* This product has 0 quantity.");
+        //     printf("\033[0m");
+        //     options();
+        // }
         rewind(file);
         while (fread(&item, sizeof(item), 1, file))
         {
             if ((strcmp(item.product_code, x) == 0))
             {
                 total = item.rate * q;
-                printf("%d ", i);
-                printf("%s ", item.product_name);
-                printf("%d ", q);
-                printf("%d ", item.rate);
-                printf("%d ", total);
+                printf("\n\t\t\t%d ", i);
+                printf("\t\t\t%s ", item.product_name);
+                printf("\t\t\t%d ", q);
+                printf("\t\t\t%d ", item.rate);
+                printf("\t\t\t%d ", total);
                 gtotal = gtotal + total;
                 size = sizeof(item);
                 item.quantity = item.quantity - q;
@@ -468,7 +501,8 @@ void saleProduct()
     }
     if (gtotal != 0)
     {
-        printf("TOTAL AMOUNT = NRs. %d", gtotal);
+        // system("clear");
+        printf("\n\v\t\t\t\t\t\tTOTAL AMOUNT = NRs. %d", gtotal);
     }
     fclose(file);
     // options();
@@ -492,12 +526,6 @@ void options()
     printf("\v\n\v\t\t\t\t\t\t\t\t--Hritik Departmental Store--\n");
     printf("\t\t\t\t\t\t\t\t**********************************\n");
     int num, choice;
-    // FILE *file;s
-    // file = fopen("Record.txt", "rb");
-    // fseek(file, SEEK_CUR, 2);
-    // n = ftell(file) / sizeof(item);
-    // printf("\n There are %d records.\n", n);
-    // // fclose(file);
     while (1)
     {
         printf("\n\t\t\t\t\t\t\t\t\t1. Insert\n\t\t\t\t\t\t\t\t\t2. Display");
@@ -505,16 +533,17 @@ void options()
         printf("\n\t\t\t\t\t\t\t\t\t6. close\n\t\t\t\t\t\t\t\t\t7. Sale product\n\n");
         printf("\t\t\t\t\t\t\t\t\tEnter your choice: ");
         choice = get_int(num);
-
         switch (choice)
         {
         case 1:
             system("clear");
             addProduct();
+            system("clear");
             break;
         case 2:
             system("clear");
             display();
+
             break;
         case 3:
             system("clear");
