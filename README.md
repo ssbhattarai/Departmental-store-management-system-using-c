@@ -5,7 +5,7 @@ This application is console based application.The main purpose of this project i
 # Tools used
 
 <h4> Compiler :  GNU GCC </h4> 
-<h4> OS :  Linux 18.04 LTS  </h4> 
+<h4> OS :  Ubuntu 18.04 LTS  </h4> 
  <h4> Code Editer : Visual Studio Code </h4> 
 
 
